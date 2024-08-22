@@ -455,11 +455,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 17be9d1e15ab3fd419d811917112c894, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Velocidad: 0
-  VelocidadMin: 0.5
-  VelocidadMax: 3.5
-  Aceleracion: 0.8
-  Desaceleracion: 3.5
+  Direccion: {x: 0, y: 0, z: 0}
+  Velocidad: 12
+  VelocidadActualX: 0
+  VelocidadActualZ: 0
+  Aceleracion: 2
+  Desaceleracion: 0.5
+  FuerzaSalto: 8
+  EnSuelo: 0
+  CapaSuelo:
+    serializedVersion: 2
+    m_Bits: 8
 --- !u!1 &2092925720
 GameObject:
   m_ObjectHideFlags: 0
@@ -473,7 +479,7 @@ GameObject:
   - component: {fileID: 2092925723}
   - component: {fileID: 2092925722}
   - component: {fileID: 2092925721}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Suelo
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -583,7 +589,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: -0.86, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 10, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
