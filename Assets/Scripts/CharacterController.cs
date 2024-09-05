@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Cinemachine;
 using UnityEditor;
 using UnityEngine;
 
@@ -8,25 +9,21 @@ public class CharacterController : MonoBehaviour
     public Vector3 Direccion;
     public float Velocidad;
     private Vector3 VelocidadObjetivo = Vector3.zero;
-    //test
-    public float VelocidadActualX;
-    public float VelocidadActualZ;
 
     public float Aceleracion;
     public float Desaceleracion;
 
     public float FuerzaSalto;
     public bool EnSuelo = false;
-    // public float FuerzaGravedad;
 
     public LayerMask CapaSuelo;
     
     private Rigidbody rb;
+    public CinemachineVirtualCamera VirtualCamera;
 
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
-        // rb.useGravity = false; //Desactiva la gravedad global para este rb
     }
 
     private void Update()
@@ -69,16 +66,19 @@ public class CharacterController : MonoBehaviour
             VelocidadObjetivo = new Vector3(xVel, rb.velocity.y, zVel);
             rb.velocity = VelocidadObjetivo;
         }
-
-        //test
-        VelocidadActualX = rb.velocity.x;
-        VelocidadActualZ = rb.velocity.z;
     }
 
     private void Movimiento()
     {
-        Direccion = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical"));
-        Direccion = Direccion.normalized;
+        Transform camTransform = VirtualCamera.transform;
+        Vector3 forward = camTransform.forward;
+        Vector3 right = camTransform.right;
+        forward.y = 0;
+        right.y = 0;
+        forward.Normalize();
+        right.Normalize();
+
+        Direccion = (forward * Input.GetAxisRaw("Vertical") + right * Input.GetAxisRaw("Horizontal")).normalized;
 
         if (Input.GetButtonDown("Jump") && EnSuelo)
         {
