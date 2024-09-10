@@ -17,6 +17,12 @@ public class CharacterController : MonoBehaviour
     public bool EnSuelo = false;
 
     public LayerMask CapaSuelo;
+
+    public float VelocidadDash;
+    public float DuracionDash;
+    private bool enDash = false;
+    private float TiempoDash;
+    private Vector3 DireccionDash; 
     
     private Rigidbody rb;
     public CinemachineVirtualCamera VirtualCamera;
@@ -30,14 +36,36 @@ public class CharacterController : MonoBehaviour
     {
         Movimiento();
         CheckSuelo();
+
+        if (Input.GetKeyDown(KeyCode.LeftShift) && EnSuelo && !enDash)
+        {
+            IniciarDash();
+        }
+
+        if (enDash && Time.time >= TiempoDash)
+        {
+            TerminarDash();
+        }
     }
 
     private void FixedUpdate()
     {
+        float VelocidadActual = Velocidad;
+
+        if (enDash)
+        {
+            VelocidadActual += VelocidadDash;
+        }
+        
         if (Direccion != Vector3.zero)
         {
             //Aceleracion
-            VelocidadObjetivo = new Vector3(Direccion.x * Velocidad, rb.velocity.y, Direccion.z * Velocidad);
+            VelocidadObjetivo = new Vector3(Direccion.x * VelocidadActual, rb.velocity.y, Direccion.z * VelocidadActual);
+            rb.velocity = Vector3.Lerp(rb.velocity, VelocidadObjetivo, Time.deltaTime * Aceleracion);
+        }
+        else if (enDash)
+        {
+            VelocidadObjetivo = DireccionDash * VelocidadActual;
             rb.velocity = Vector3.Lerp(rb.velocity, VelocidadObjetivo, Time.deltaTime * Aceleracion);
         }
         else
@@ -105,5 +133,19 @@ public class CharacterController : MonoBehaviour
         }
 
         // Debug.DrawRay(transform.position, Vector3.down * 1f, EnSuelo ? Color.green : Color.red);
+    }
+
+    //Dash
+    private void IniciarDash()
+    {
+        enDash = true;
+        TiempoDash = Time.time + DuracionDash;
+
+        DireccionDash = Direccion == Vector3.zero ? VirtualCamera.transform.forward : Direccion;
+    }
+
+    private void TerminarDash()
+    {
+        enDash = false;
     }
 }
