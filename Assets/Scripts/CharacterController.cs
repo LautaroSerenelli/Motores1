@@ -29,6 +29,7 @@ public class CharacterController : MonoBehaviour
     private void Update()
     {
         Movimiento();
+        CheckSuelo();
     }
 
     private void FixedUpdate()
@@ -91,19 +92,18 @@ public class CharacterController : MonoBehaviour
         rb.velocity += Vector3.up * FuerzaSalto;
     }
 
-    private void OnCollisionEnter(Collision collision)
+    private void CheckSuelo()
     {
-        if(collision.gameObject.layer == LayerMask.NameToLayer("Suelo"))
+        RaycastHit hit;
+        if (Physics.Raycast(transform.position, Vector3.down, out hit, 1f, CapaSuelo))
         {
             EnSuelo = true;
         }
-    }
-
-    private void OnCollisionExit(Collision collision)
-    {
-        if(collision.gameObject.layer == LayerMask.NameToLayer("Suelo"))
+        else
         {
             EnSuelo = false;
         }
+
+        // Debug.DrawRay(transform.position, Vector3.down * 1f, EnSuelo ? Color.green : Color.red);
     }
 }
