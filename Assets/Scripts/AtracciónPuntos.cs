@@ -21,6 +21,8 @@ public class AtracciónPuntos : MonoBehaviour
     private Vector3 PuntoInicial;
     private float DesfaseOscilacion;
 
+    public int ValorPunto;
+
     private Camera mainCamera;
 
     private void Start()
@@ -96,6 +98,7 @@ public class AtracciónPuntos : MonoBehaviour
         {
             Destroy(IconInstance);
         }
+        GameManager.Instance.AddScore(ValorPunto);
         Destroy(gameObject);
     }
 
